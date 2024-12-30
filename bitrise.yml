@@ -1,20 +1,27 @@
----
-format_version: '13'
+format_version: 11
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
-project_type: other
+
 workflows:
-  primary:
+  run_telegram_bot:
     steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8: {}
-    - deploy-to-bitrise-io@2: {}
-    triggers:
-      push:
-      - branch: main
-      pull_request:
-      - source_branch: "*"
-meta:
-  bitrise.io:
-    stack: linux-docker-android-22.04
-    machine_type_id: elite
+      - git-clone@6: {}
+      - install-deps@2:
+          inputs:
+            - project_type: "python"
+            - python_version: "3.x" # Specify the Python version you need
+      - script@1:
+          title: "Run Telegram Bot"
+          inputs:
+            - content: |-
+                #!/bin/bash
+                set -ex
+                # Ensure the necessary environment variables are set
+                export BOT_TOKEN="7747598023:AAGfi-m_9gw2L_4McP6z62OjGlbc-AavNVY"
+                export OWNER_USERNAME="BGMIDDOS1245"
+                
+                # Navigate to the directory containing your bot code
+                cd ranbal
+                
+                # Run the bot
+                python3 raja.py
+                
